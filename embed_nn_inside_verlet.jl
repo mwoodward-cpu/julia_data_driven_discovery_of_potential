@@ -3,3 +3,5 @@
 
 #In this file we use embed the NN inside the Verlet method in order to
 #approximate and learn G = -∂U/∂r
+
+#mimic the pytorch code:

@@ -43,9 +43,6 @@ h = 70
 
 
 
-
-#---------Model
-
 #-----------------Neural ode Model -------
 
 #want true data to be in form [coord, time step]
@@ -65,8 +62,8 @@ end
 #loss for batching:
 function loss_neuralode(p, start, k)
     pred = predict_neuralode(p)
-    loss = sum(abs2,ode_data[:,start:start+k_t] .- pred[:,start:start+k_t])
-    #loss = mean(abs.(pred[:,start:start+k_t] .- ode_data[:,start:start+k_t]))
+    #loss = sum(abs2,ode_data[:,start:start+k_t] .- pred[:,start:start+k_t])
+    loss = mean(abs.(pred[:,start:start+k_t] .- ode_data[:,start:start+k_t]))  #best in torchdiffeq examples
     loss,pred
 end
 
@@ -89,6 +86,8 @@ cb = function (p,l,pred;doplot=true) #callback function to observe training
 end
 
 
+
+
 #------------Training with basic batching:
 
 
@@ -97,6 +96,9 @@ k = 200    #batch size
 k_t = 35  #batch time
 data2 = ((rand(1:size(ode_data)[2] -k_t), k) for i in 1:MAX_BATCHES)
 # data3 = (sample((1:size(ode_data)[2] - k_t), k; replace = false, ordered = false) for i in 1:MAX_BATCHES)
+
+
+
 opt = ADAM(7e-4)
 # opt = RMSProp(0.005)
 res = DiffEqFlux.sciml_train(loss_neuralode, prob_neuralode.p, opt, data2; cb = cb)
