@@ -41,8 +41,9 @@ h = 70
 dt = 0.01f0
 T = size(t)[1]
 tspan = (0.0f0, T)
-top_dim = size(x)[3]
 N = size(x)[2]
+top_dim = size(x)[3]
+
 batch_size = size(x)[4]
 datasize = size(t)[1]
 

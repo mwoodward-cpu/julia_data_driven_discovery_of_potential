@@ -17,15 +17,37 @@ prob_trueode = ODEProblem(trueODEfunc, u0, tspan)
 ode_data = Array(solve(prob_trueode, Tsit5(), saveat = tsteps))
 print(size(ode_data))
 
+
 # dudt2 = FastChain((x, p) -> x.^3,
 #                   FastDense(2, 50, tanh),
 #                   FastDense(50, 2))
+
+
+#----------by hand ------
+
+# model = Chain(Dense(2, 50, tanh), Dense(50, 2))
+#
+# p, re = Flux.destructure(model)
+# dudt!(u, p, t) = re(p)(u)
+# # u0 = rand(2)
+#
+# prob = ODEProblem(dudt!, u0, tspan, p)
+# prob_neuralode = solve(prob,Tsit5(), saveat = tsteps)
+
+
+
+
+#-----------working example:
 
 dudt2 = FastChain(FastDense(2, 70, tanh),
                   FastDense(70, 2))
 
 
 prob_neuralode = NeuralODE(dudt2, tspan, Tsit5(), saveat = tsteps)
+
+
+
+#----------loss and prediction
 
 
 function predict_neuralode(p)
@@ -65,7 +87,10 @@ result_neuralode = DiffEqFlux.sciml_train(loss_neuralode, prob_neuralode.p,
                                           ADAM(0.05), cb = cb,
                                           maxiters = 1000)
 
-
+#
+# result_neuralode = DiffEqFlux.sciml_train(loss_neuralode, p,
+#                                           ADAM(0.05), cb = cb,
+#                                           maxiters = 1000)
 
 #another training bootstraped from previous:
 

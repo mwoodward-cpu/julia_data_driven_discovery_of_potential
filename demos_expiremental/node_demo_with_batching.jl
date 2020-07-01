@@ -73,21 +73,21 @@ end
 
 #------------Training with basic batching:
 
-MAX_BATCHES = 3000
-k = 20    #batch size
-k_t = 10  #batch time
+MAX_BATCHES = 1000
+k = 25    #batch size
+k_t = 25  #batch time
 data2 = ((rand(1:size(ode_data)[2] -k_t), k) for i in 1:MAX_BATCHES)
 # data3 = (sample((1:size(ode_data)[2] - k_t), k; replace = false, ordered = false) for i in 1:MAX_BATCHES)
-opt = ADAM(0.05)
-# opt = RMSProp(0.005)
+# opt = ADAM(0.05)
 
 res = DiffEqFlux.sciml_train(loss_neuralode, prob_neuralode.p, opt, data2; cb = cb)
 
 
+
 result_neuralode2 = DiffEqFlux.sciml_train(loss_neuralode,
                                           res.minimizer,
-                                          LBFGS(), data2;
-                                          cb = cb)
+                                          LBFGS(),
+                                          cb = cb, maxiters = 1000)
 
 
 

@@ -5,7 +5,6 @@
 #Updated: 06/09/20
 
 
-#Upload packages as we need them:
 #not used: #using PyCall, ThArrays,
 using NPZ, Flux, Zygote, DiffEqFlux
 
